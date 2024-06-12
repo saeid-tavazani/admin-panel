@@ -1,7 +1,12 @@
-import { Button } from "./components/ui/button";
+import { Route, Routes } from "react-router-dom";
+import Home from "./page/home";
 
 const App = () => {
-  return <Button>شروع</Button>;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+    </Routes>
+  );
 };
 
 export default App;
