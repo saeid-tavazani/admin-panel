@@ -1,9 +1,13 @@
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 import Layout from "@/components/ui/layout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from "react-router-dom";
+import { signIn } from "@/services/userServices";
+import AlertError from "@/components/ui/alertError";
 type formData = {
   Email: string;
   Password: string;
@@ -15,19 +19,30 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<formData>();
-  const onSubmit = (data: formData) => {
-    console.log(data);
+
+  const [email, setEmail] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+
+  const { data, error, isLoading } = signIn(email!, password!);
+
+  const onSubmit = ({ Email, Password }: formData) => {
+    setEmail(Email);
+    setPassword(Password);
   };
-  console.log(errors);
 
   return (
-    <Layout className="items-center justify-center h-screen flex">
+    <Layout className="items-center justify-center h-screen flex flex-col">
+      {error && <AlertError message={error.message} />}
+
+      {!data?.length && email ? (
+        <AlertError message="کاربری با این مشخصات پیدا نشد" />
+      ) : null}
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-96 border shadow rounded-md p-5 bg-secondary flex flex-col gap-4"
       >
         <Input
-          // type="email"
           placeholder="ایمیل"
           {...register("Email", { required: true, pattern: /^\S+@\S+$/i })}
         />
@@ -68,7 +83,13 @@ const SignIn = () => {
             رمز عبور را فراموش کرده اید؟
           </Link>
         </div>
-        <Button type="submit">ورود</Button>
+        <Button disabled={isLoading ? true : false} type="submit">
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            "ورود"
+          )}
+        </Button>
       </form>
     </Layout>
   );
