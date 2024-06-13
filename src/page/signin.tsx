@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import Layout from "@/components/ui/layout";
 import { Input } from "@/components/ui/input";
@@ -8,12 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { signIn } from "@/services/userServices";
 import AlertError from "@/components/ui/alertError";
+import { useUserContext } from "@/context/userContext";
 type formData = {
   Email: string;
   Password: string;
   Remember: boolean;
 };
 const SignIn = () => {
+  const navigate = useNavigate();
+  const { setUser, user } = useUserContext();
   const {
     register,
     handleSubmit,
@@ -24,6 +27,17 @@ const SignIn = () => {
   const [password, setPassword] = useState<string | null>(null);
 
   const { data, error, isLoading } = signIn(email!, password!);
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, []);
+  useEffect(() => {
+    if (data?.length && email) {
+      setUser(data[0]);
+      navigate("/dashboard");
+    }
+  }, [data]);
 
   const onSubmit = ({ Email, Password }: formData) => {
     setEmail(Email);
