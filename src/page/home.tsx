@@ -2,6 +2,7 @@ import Layout from "@/components/ui/layout";
 import { Link } from "react-router-dom";
 import { FaGithub } from "react-icons/fa6";
 import { FaPlayCircle } from "react-icons/fa";
+import { ModeToggle } from "@/components/ui/modeToggle";
 const Home = () => {
   return (
     <Layout className="h-screen flex items-center justify-center flex-col gap-7">
@@ -14,7 +15,7 @@ const Home = () => {
       <div className="flex items-center gap-3">
         <Link
           className="bg-primary hover:bg-primary/90 px-3 py-2 rounded-md text-sm flex gap-2 items-center transition-all"
-          to="signin"
+          to="/signin"
         >
           <FaPlayCircle size={25} />
           پیش نمایش
@@ -27,6 +28,7 @@ const Home = () => {
           <FaGithub size={25} />
           GitHub
         </a>
+        <ModeToggle />
       </div>
     </Layout>
   );
