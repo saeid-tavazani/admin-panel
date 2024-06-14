@@ -4,6 +4,7 @@ import { UserProvider } from "./context/userContext.tsx";
 
 import Home from "./page/home";
 import SignIn from "./page/signin";
+import Dashboard from "./page/dashboard";
 
 const App = () => {
   return (
@@ -11,7 +12,7 @@ const App = () => {
       <UserProvider>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="signin" element={<SignIn />} />
         </Routes>
       </UserProvider>
