@@ -14,7 +14,7 @@ const Home = () => {
       </p>
       <div className="flex items-center gap-3">
         <Link
-          className="bg-primary hover:bg-primary/90 px-3 py-2 rounded-md text-sm flex gap-2 items-center transition-all"
+          className="bg-primary hover:bg-primary/90 px-3 py-2 rounded-md text-sm flex gap-2 items-center transition-all text-background"
           to="/signin"
         >
           <FaPlayCircle size={25} />
