@@ -5,6 +5,7 @@ type userType = {
   id: number;
   name: string;
   email: string;
+  profile: string;
   password: string;
 };
 

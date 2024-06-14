@@ -9,6 +9,7 @@ type UserType = {
   id: number;
   name: string;
   email: string;
+  profile: string;
 };
 
 type UserContextType = {

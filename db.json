@@ -4,13 +4,15 @@
       "id": 1,
       "name": "saeid",
       "email": "saeidtavazani@gmail.com",
-      "password": "IRs.074180"
+      "password": "IRs.074180",
+      "profile": ""
     },
     {
       "id": 2,
       "name": "admin",
       "email": "admin@gmail.com",
-      "password": "admin.admin"
+      "password": "admin.admin",
+      "profile": ""
     }
   ]
 }
