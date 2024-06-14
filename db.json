@@ -2,14 +2,14 @@
   "user": [
     {
       "id": 1,
-      "name": "saeid",
+      "name": "سعید",
       "email": "saeidtavazani@gmail.com",
       "password": "IRs.074180",
       "profile": ""
     },
     {
       "id": 2,
-      "name": "admin",
+      "name": "ادمین",
       "email": "admin@gmail.com",
       "password": "admin.admin",
       "profile": ""
