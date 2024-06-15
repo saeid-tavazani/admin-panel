@@ -22,6 +22,7 @@ const Header = () => {
             <input
               type="text"
               className="bg-input text-sm w-[calc(100%-16px)] pr-1"
+              placeholder="جستجو ..."
             />
           </div>
           <ModeToggle variant="link" />

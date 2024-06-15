@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
+import Cookie from "js-cookie";
 
 export function useLocalStorage<T>(key: string, initalValue: T | (() => T)) {
   const [value, setValue] = useState<T>(() => {
-    const jsonValue = localStorage.getItem(key);
-    if (jsonValue != null) {
+    const jsonValue = Cookie.get(key);
+    if (jsonValue != undefined) {
       return JSON.parse(jsonValue);
     }
     if (typeof initalValue === "function") {
@@ -13,7 +14,9 @@ export function useLocalStorage<T>(key: string, initalValue: T | (() => T)) {
     }
   });
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
+    if (value) {
+      Cookie.set(key, JSON.stringify(value), { expires: 7 });
+    }
   }, [key, value]);
   return [value, setValue] as [typeof value, typeof setValue];
 }
