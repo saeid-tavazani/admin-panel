@@ -17,14 +17,19 @@ const Aside = () => {
               className="w-[25px rounded-full]"
             />
           ) : (
-            <FaUserCircle size={25} />
+            <FaUserCircle
+              size={25}
+              className="text-dark-semi-transparent-black dark:text-foreground"
+            />
           )}
           <span className="text-sm">{user?.name}</span>
         </div>
         <div className="flex flex-col gap-6">
           {navigation.map(({ category, links }) => (
             <div className="flex flex-col gap-3" key={category}>
-              <span className="font-bold text-sm text-primary">{category}</span>
+              <span className="font-bold text-sm text-primary dark:text-pale-blue">
+                {category}
+              </span>
               <ul className="flex flex-col gap-1 w-full">
                 {links.map((item) => (
                   <li key={item.slug} className="w-full">
