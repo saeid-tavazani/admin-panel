@@ -1,19 +1,48 @@
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { navigation } from "@/staticData";
 import { useUserContext } from "@/context/userContext";
 import { Button } from "../ui/button";
 const Aside = ({ status }: { status: boolean }) => {
   const { user } = useUserContext();
+  useGSAP(() => {
+    if (status) {
+      gsap.to("#sidebar", {
+        minWidth: "14rem",
+        width: "14rem",
+        padding: "1.5rem",
+      });
+      gsap.to(".scalex", {
+        scale: 1,
+        display: "block",
+        duration: "100ms",
+        delay: "300ms",
+      });
+    } else {
+      gsap.to("#sidebar", {
+        minWidth: "fit-content",
+        width: "fit-content",
+        padding: "1.5rem 0.5rem",
+      });
+      gsap.to(".scalex", {
+        scale: 0,
+        display: "none",
+        duration: "100ms",
+        delay: "300ms",
+      });
+    }
+  }, [status]);
+
   return (
     <aside
-      className={`${
-        status ? "min-w-56 w-56 p-6" : "w-fit min-w-fit px-2 py-6"
-      } border-l h-full flex flex-col gap-10  justify-between`}
+      id="sidebar"
+      className={` border-l h-full flex flex-col gap-10 justify-between w-fit min-w-fit`}
     >
       <article
-        className={`h-full overflow-y-auto flex flex-col gap-10 ${
+        className={`h-full overflow-y-auto overflow-x-hidden flex flex-col gap-10 ${
           !status ? "items-center" : ""
         }`}
       >
@@ -30,16 +59,14 @@ const Aside = ({ status }: { status: boolean }) => {
               className="text-dark-semi-transparent-black dark:text-foreground"
             />
           )}
-          {status && <span className="text-sm">{user?.name}</span>}
+          <span className="text-sm scalex">{user?.name}</span>
         </div>
         <div className="flex flex-col gap-6">
           {navigation.map(({ category, links }) => (
             <div className="flex flex-col gap-3" key={category}>
-              {status && (
-                <span className="font-bold text-sm text-primary dark:text-pale-blue">
-                  {category}
-                </span>
-              )}
+              <span className="font-bold text-sm text-primary dark:text-pale-blue scalex">
+                {category}
+              </span>
 
               <ul className="flex flex-col gap-1 w-full">
                 {links.map((item) => (
@@ -51,7 +78,7 @@ const Aside = ({ status }: { status: boolean }) => {
                       } transition-all hover:bg-card`}
                     >
                       <item.icon size={20} />
-                      {status && item.title}
+                      <span className="scalex"> {item.title}</span>
                     </Link>
                   </li>
                 ))}
@@ -66,7 +93,7 @@ const Aside = ({ status }: { status: boolean }) => {
           className="w-full flex items-center gap-2 text-destructive text-sm justify-start"
         >
           <MdLogout size={20} />
-          {status && "خروج"}
+          <span className="scalex">خروج</span>
         </Button>
       </article>
     </aside>
