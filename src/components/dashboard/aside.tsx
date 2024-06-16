@@ -4,11 +4,19 @@ import { MdLogout } from "react-icons/md";
 import { navigation } from "@/staticData";
 import { useUserContext } from "@/context/userContext";
 import { Button } from "../ui/button";
-const Aside = () => {
+const Aside = ({ status }: { status: boolean }) => {
   const { user } = useUserContext();
   return (
-    <aside className="min-w-56 w-56 border-l h-full flex flex-col gap-10 p-6 justify-between">
-      <article className="h-full overflow-y-auto flex flex-col gap-10">
+    <aside
+      className={`${
+        status ? "min-w-56 w-56 p-6" : "w-fit min-w-fit px-2 py-6"
+      } border-l h-full flex flex-col gap-10  justify-between`}
+    >
+      <article
+        className={`h-full overflow-y-auto flex flex-col gap-10 ${
+          !status ? "items-center" : ""
+        }`}
+      >
         <div className="flex items-center gap-2">
           {user?.profile ? (
             <img
@@ -22,23 +30,28 @@ const Aside = () => {
               className="text-dark-semi-transparent-black dark:text-foreground"
             />
           )}
-          <span className="text-sm">{user?.name}</span>
+          {status && <span className="text-sm">{user?.name}</span>}
         </div>
         <div className="flex flex-col gap-6">
           {navigation.map(({ category, links }) => (
             <div className="flex flex-col gap-3" key={category}>
-              <span className="font-bold text-sm text-primary dark:text-pale-blue">
-                {category}
-              </span>
+              {status && (
+                <span className="font-bold text-sm text-primary dark:text-pale-blue">
+                  {category}
+                </span>
+              )}
+
               <ul className="flex flex-col gap-1 w-full">
                 {links.map((item) => (
                   <li key={item.slug} className="w-full">
                     <Link
                       to={item.slug}
-                      className="flex items-center gap-2 text-sm rounded-md h-9 px-5 transition-all hover:bg-card"
+                      className={`flex items-center gap-2 text-sm rounded-md h-9 ${
+                        status ? "px-5" : "px-3"
+                      } transition-all hover:bg-card`}
                     >
                       <item.icon size={20} />
-                      {item.title}
+                      {status && item.title}
                     </Link>
                   </li>
                 ))}
@@ -53,7 +66,7 @@ const Aside = () => {
           className="w-full flex items-center gap-2 text-destructive text-sm justify-start"
         >
           <MdLogout size={20} />
-          خروج
+          {status && "خروج"}
         </Button>
       </article>
     </aside>

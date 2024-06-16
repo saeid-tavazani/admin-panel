@@ -4,12 +4,12 @@ import Layout from "../ui/layout";
 import { ModeToggle } from "../ui/modeToggle";
 import { Button } from "../ui/button";
 import { CiSearch } from "react-icons/ci";
-const Header = () => {
+const Header = ({ sidebarController }: { sidebarController: () => void }) => {
   return (
     <header className="w-full border-b h-14 min-h-14">
       <Layout className="flex items-center h-full justify-between">
         <div className="flex items-center">
-          <Button variant="link">
+          <Button variant="link" onClick={sidebarController}>
             <VscLayoutSidebarRightOff size={20} />
           </Button>
           <Button variant="link">
