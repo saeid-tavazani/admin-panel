@@ -1,7 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { navigation } from "@/staticData";
 
 const NavigationSection = ({ status }: { status: boolean }) => {
+  const [page, setPage] = useState("dashboard");
+  const { pathname } = useLocation();
+  const location = pathname.split("/");
+
+  useEffect(() => {
+    setPage(location[location.length - 1]);
+  }, [pathname]);
+
   return (
     <div className="flex flex-col gap-6">
       {navigation.map(({ category, links }) => (
@@ -16,7 +25,9 @@ const NavigationSection = ({ status }: { status: boolean }) => {
                   to={item.slug}
                   className={`flex items-center gap-2 text-sm rounded-md h-9 ${
                     status ? "px-5" : "px-3"
-                  } transition-all hover:bg-card`}
+                  } transition-all hover:bg-card ${
+                    page === item.slug.replace("/", "") ? "bg-card" : ""
+                  }`}
                 >
                   <item.icon size={20} />
                   <span className="scalex">{item.title}</span>
