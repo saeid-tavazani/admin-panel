@@ -1,91 +1,82 @@
-import { FaUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
+import { useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { navigation } from "@/staticData";
 import { useUserContext } from "@/context/userContext";
 import { Button } from "../ui/button";
+import UserSection from "./userSection ";
+import NavigationSection from "./NavigationSection";
 const Aside = ({ status }: { status: boolean }) => {
   const { user } = useUserContext();
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
   useGSAP(() => {
-    if (status) {
-      gsap.to("#sidebar", {
-        minWidth: "14rem",
-        width: "14rem",
-        padding: "1.5rem",
-      });
-      gsap.to(".scalex", {
-        scale: 1,
-        display: "block",
-        duration: "100ms",
-        delay: "300ms",
-      });
-    } else {
-      gsap.to("#sidebar", {
+    const sidebarAnimation = {
+      expanded: { minWidth: "14rem", width: "14rem", padding: "1.5rem" },
+      collapsed: {
         minWidth: "fit-content",
         width: "fit-content",
         padding: "1.5rem 0.5rem",
-      });
-      gsap.to(".scalex", {
-        scale: 0,
-        display: "none",
-        duration: "100ms",
-        delay: "300ms",
-      });
+      },
+      mobileExpanded: {
+        minWidth: "14rem",
+        width: "14rem",
+        padding: "1.5rem",
+        right: 0,
+      },
+      mobileCollapsed: { right: "-100%" },
+    };
+
+    const scaleAnimation = {
+      show: { scale: 1, display: "block", duration: "100ms", delay: "300ms" },
+      hide: { scale: 0, display: "none", duration: "100ms", delay: "300ms" },
+    };
+
+    if (innerWidth > 760) {
+      gsap.to(
+        "#sidebar",
+        status ? sidebarAnimation.expanded : sidebarAnimation.collapsed
+      );
+      gsap.to(".scalex", status ? scaleAnimation.show : scaleAnimation.hide);
+    } else {
+      gsap.to(
+        "#sidebar",
+        status
+          ? sidebarAnimation.mobileExpanded
+          : sidebarAnimation.mobileCollapsed
+      );
+      if (status) {
+        gsap.to(".scalex", scaleAnimation.show);
+      }
     }
-  }, [status]);
+  }, [status, innerWidth]);
+
+  const handleVideoSrcSet = () => {
+    setInnerWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleVideoSrcSet);
+    return () => {
+      window.removeEventListener("resize", handleVideoSrcSet);
+    };
+  }, []);
 
   return (
     <aside
       id="sidebar"
-      className={` border-l h-full flex flex-col gap-10 justify-between w-fit min-w-fit`}
+      className={`border-l h-full flex flex-col gap-10 justify-between w-fit min-w-fit bg-background ${
+        innerWidth < 760
+          ? "absolute right-[-100%] h-[calc(100%-55.2px)] bottom-0 border-t"
+          : ""
+      }`}
     >
       <article
         className={`h-full overflow-y-auto overflow-x-hidden flex flex-col gap-10 ${
           !status ? "items-center" : ""
         }`}
       >
-        <div className="flex items-center gap-2">
-          {user?.profile ? (
-            <img
-              src={user.profile}
-              alt="profile"
-              className="w-[25px rounded-full]"
-            />
-          ) : (
-            <FaUserCircle
-              size={25}
-              className="text-dark-semi-transparent-black dark:text-foreground"
-            />
-          )}
-          <span className="text-sm scalex">{user?.name}</span>
-        </div>
-        <div className="flex flex-col gap-6">
-          {navigation.map(({ category, links }) => (
-            <div className="flex flex-col gap-3" key={category}>
-              <span className="font-bold text-sm text-primary dark:text-pale-blue scalex">
-                {category}
-              </span>
-
-              <ul className="flex flex-col gap-1 w-full">
-                {links.map((item) => (
-                  <li key={item.slug} className="w-full">
-                    <Link
-                      to={item.slug}
-                      className={`flex items-center gap-2 text-sm rounded-md h-9 ${
-                        status ? "px-5" : "px-3"
-                      } transition-all hover:bg-card`}
-                    >
-                      <item.icon size={20} />
-                      <span className="scalex"> {item.title}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <UserSection user={user} />
+        <NavigationSection status={status} />
       </article>
       <article className="min-h-fit">
         <Button
